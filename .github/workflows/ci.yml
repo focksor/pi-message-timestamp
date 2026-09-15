@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: 验证（语法检查 + 类型检查 + 加载冒烟 + 打包）
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v6
+
+      # Node 24：原生 TS 类型剥离可直接 node 运行 .ts
+      - name: 安装 Node 24
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          package-manager-cache: false
+
+      - name: 语法检查
+        run: node --check index.ts
+
+      # devDependencies 不入库，仅在 CI 临时安装：
+      # - pi-coding-agent 提供 ExtensionAPI 等类型（其依赖带出 pi-tui）
+      # - 装完后 index.ts 的值导入（pi-tui 的 Text）可在裸环境解析，加载冒烟才有意义
+      - name: 临时安装类型检查与冒烟所需依赖
+        run: |
+          npm i --no-save --no-package-lock --no-audit --no-fund \
+            typescript@latest @types/node@latest @earendil-works/pi-coding-agent@latest
+
+      - name: TypeScript 严格类型检查
+        run: |
+          npx tsc --module nodenext --moduleResolution nodenext --target es2022 \
+            --strict --noEmit --skipLibCheck --types node index.ts
+
+      # index.ts 顶层仅定义工厂函数、无副作用，导入安全
+      - name: 加载冒烟测试
+        run: node index.ts
+
+      - name: 打包检查（tarball 内容与体积）
+        run: |
+          npm pack
+          tar tzf pi-message-timestamp-*.tgz

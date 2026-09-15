@@ -1,0 +1,40 @@
+{
+	"name": "pi-message-timestamp",
+	"version": "1.0.0",
+	"description": "pi extension: show timestamps for chat messages — user message time rendered inside the message box, assistant reply time as a dim line below with turn duration",
+	"type": "module",
+	"license": "MIT",
+	"author": "focksor <focksor@outlook.com>",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/focksor/pi-message-timestamp.git"
+	},
+	"bugs": {
+		"url": "https://github.com/focksor/pi-message-timestamp/issues"
+	},
+	"homepage": "https://github.com/focksor/pi-message-timestamp#readme",
+	"keywords": [
+		"pi-package",
+		"pi",
+		"extension",
+		"timestamp",
+		"time",
+		"duration",
+		"chat"
+	],
+	"files": [
+		"index.ts"
+	],
+	"pi": {
+		"extensions": [
+			"./index.ts"
+		]
+	},
+	"peerDependencies": {
+		"@earendil-works/pi-coding-agent": "*",
+		"@earendil-works/pi-tui": "*"
+	},
+	"engines": {
+		"node": ">=22.19.0"
+	}
+}
