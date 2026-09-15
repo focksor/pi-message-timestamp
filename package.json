@@ -1,6 +1,6 @@
 {
 	"name": "pi-message-timestamp",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "pi extension: show timestamps for chat messages — user message time rendered inside the message box, assistant reply time as a dim line below with turn duration",
 	"type": "module",
 	"license": "MIT",
