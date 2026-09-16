@@ -53,7 +53,7 @@ pi 编码代理扩展：为聊天消息显示时间戳，并在 AI 工作时实�
 }
 ```
 
-**方式二：作为 pi 包安装**（适合分发，已含 package.json manifest）：
+**方式二：作为 pi 包安装**（已发布到 npm，含 package.json manifest）：
 
 ```bash
 pi install npm:pi-message-timestamp
@@ -63,6 +63,16 @@ pi install git:github.com/<user>/pi-message-timestamp
 
 卸载：移除 `extensions` 数组条目或 `pi uninstall pi-message-timestamp`。
 
+## 发布
+
+发布由 GitHub Actions 自动完成，**无需本地 npm 登录**：
+
+```bash
+git tag v1.1.0 && git push origin v1.1.0
+```
+
+推送 `v*` tag 触发 [release 工作流](.github/workflows/release.yml)：验证 tag 与 package.json 版本一致、语法/类型/加载冒烟检查、`npm pack`，经 **Trusted Publishing（OIDC）** 发布到 npm，并创建 GitHub Release（附 tgz）。提交到 `main` 的代码变更触发 [CI 工作流](.github/workflows/ci.yml)做同样的检查（不含发布）。
+
 ## 实现说明
 
 - 监听 `turn_end` 事件（轮次结束、消息已落盘时触发），取事件触发时刻 `Date.now()` 作为回复完成时间（与真实落盘时间误差在毫秒级），并计算距最近一条用户消息的整轮耗时
@@ -70,3 +80,7 @@ pi install git:github.com/<user>/pi-message-timestamp
 - 实时计时依赖 `agent_start` / `agent_settled` 事件与 `ctx.ui.setStatus()`，不拦截输入、不修改消息
 - 依赖 pi 内置的 `@earendil-works/pi-tui`（声明为 peerDependencies），无第三方运行时依赖，单文件扩展
 - 作为 pi 包分发时会被 `pi` manifest（package.json）索引，`pi-package` keyword 便于包市场发现
+
+## 变更记录
+
+见 [CHANGELOG.md](CHANGELOG.md)。
