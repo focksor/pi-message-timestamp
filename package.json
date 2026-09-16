@@ -1,7 +1,7 @@
 {
 	"name": "pi-message-timestamp",
-	"version": "1.0.1",
-	"description": "pi extension: show timestamps for chat messages — user message time rendered inside the message box, assistant reply time as a dim line below with turn duration",
+	"version": "1.1.0",
+	"description": "pi extension: message timestamps (user msg time inside bubble, assistant reply time + turn duration below) and live AI working duration in the footer status line",
 	"type": "module",
 	"license": "MIT",
 	"author": "focksor <focksor@outlook.com>",
@@ -23,7 +23,8 @@
 		"chat"
 	],
 	"files": [
-		"index.ts"
+		"index.ts",
+		"CHANGELOG.md"
 	],
 	"pi": {
 		"extensions": [
